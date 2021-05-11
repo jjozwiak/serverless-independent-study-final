@@ -1,0 +1,11 @@
+{
+  "name": "webform-app",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {
+    "gridjs": "^3.4.0"
+  },
+  "devDependencies": {
+    "serverless-python-requirements": "^5.1.0"
+  }
+}

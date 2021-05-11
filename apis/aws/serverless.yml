@@ -1,0 +1,99 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: webform-app
+# app and org for use with dashboard.serverless.com
+app: webform-app-app
+org: jasonjozwiak
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: "2"
+
+configValidationMode: error
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+  httpApi:
+    cors: true
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+
+# you can add packaging information here
+package:
+  include:
+    - ../shared/**
+
+functions:
+
+  forms:
+    handler: handler.getForms
+    environment:
+      MONGO_CONNECTION_STRING: ${file(./config.json):MONGO_CONNECTION_STRING}
+    tags:
+      app: ind-study
+    events:
+      - httpApi:
+          path: /forms
+          method: get
+
+  createForm:
+    handler: handler.createForm
+    environment:
+      MONGO_CONNECTION_STRING: ${file(./config.json):MONGO_CONNECTION_STRING}
+    tags:
+      app: ind-study
+    events:
+      - httpApi:
+          path: /form/create
+          method: post
+
+  deleteForm:
+    handler: handler.deleteForm
+    environment:
+      MONGO_CONNECTION_STRING: ${file(./config.json):MONGO_CONNECTION_STRING}
+    tags:
+      app: ind-study
+    events:
+      - httpApi:
+          path: /form/{id}
+          method: delete
+
+  formById:
+    handler: handler.getFormById
+    environment:
+      MONGO_CONNECTION_STRING: ${file(./config.json):MONGO_CONNECTION_STRING}
+    tags:
+      app: ind-study
+    events:
+      - httpApi:
+          path: /form/{id}
+          method: get
+
+  submitFormData:
+    handler: handler.submitFormData
+    environment:
+      MONGO_CONNECTION_STRING: ${file(./config.json):MONGO_CONNECTION_STRING}
+    tags:
+      app: ind-study
+    events:
+      - httpApi:
+          path: /form/{id}
+          method: post
+
+plugins:
+  - serverless-python-requirements
