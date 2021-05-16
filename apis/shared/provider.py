@@ -1,7 +1,7 @@
 import json
 import copy
+import logging
 
-## TODO these classes should implement an interface
 class BaseProvider:
     def __init__(self):
         print('Generic platform initialized')
@@ -28,7 +28,11 @@ class AzureProvider(BaseProvider):
         return event.route_params.get(key)
 
     def getQueryStringParam(self, event, key):
-        return ''
+        title = event.params.get(key)
+        if title is None:
+            return ''
+        else:
+            return title
 
     def getPostData(self, event, key):
         data = event.get_json()
